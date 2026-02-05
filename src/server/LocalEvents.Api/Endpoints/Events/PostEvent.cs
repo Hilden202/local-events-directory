@@ -1,4 +1,5 @@
-﻿using LocalEvents.Api.Endpoints._internal;
+﻿using LocalEvents.Api.Data;
+using LocalEvents.Api.Endpoints._internal;
 using LocalEvents.Api.Endpoints.Categories;
 using LocalEvents.Api.Endpoints.Events.Models;
 
@@ -8,7 +9,7 @@ public class PostEvent : IEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/events", (CreateEventRequest request) =>
+        app.MapPost("/events", (CreateEventRequest request, AppDbContext db) =>
         {
             // 1. Enkel validering
             if (string.IsNullOrWhiteSpace(request.Title))
@@ -22,8 +23,9 @@ public class PostEvent : IEndpoint
                 CategoryName = request.CategoryName
             };
             
-            // 3. Lägg till i EventStore
-            EventStore.Events.Add(newEvent);
+            // 3. Lägg till i databasen
+            db.Events.Add(newEvent);
+            db.SaveChanges();
             
             // 4. Returnera korrekt REST-svar
             return Results.Created($"/events/{newEvent.Id}", newEvent);
