@@ -1,4 +1,6 @@
-﻿using LocalEvents.Api.Endpoints._internal;
+﻿using LocalEvents.Api.Data;
+using LocalEvents.Api.Endpoints._internal;
+
 
 namespace LocalEvents.Api.Endpoints.Categories;
 
@@ -6,12 +8,16 @@ public class DeleteCategory : IEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("/categories/{name}", (string name) =>
+        app.MapDelete("/categories/{id}", (Guid id, AppDbContext db) =>
         {
-            if (!CategoryStore.Categories.Contains(name))
+            var category = db.Categories.FirstOrDefault(c => c.Id == id);
+
+            if (category is null)
                 return Results.NotFound();
 
-            CategoryStore.Categories.Remove(name);
+            db.Categories.Remove(category);
+            db.SaveChanges();
+
             return Results.NoContent();
         });
     }
