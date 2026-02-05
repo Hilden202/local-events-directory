@@ -7,13 +7,7 @@ public class GetCategories : IEndpoint
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
         app.MapGet("/categories", () =>
-        {
-            return new[]
-            {
-                "Music",
-                "Sports",
-                "Tech"
-            };
-        });
+            Results.Ok(CategoryStore.Catergories)
+        );
     }
 }
