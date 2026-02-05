@@ -6,18 +6,18 @@ public class PutCategory : IEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPut("/categories", (string oldName, string newName) =>
+        app.MapPut("/categories/{name}", (string name, string newName) =>
         {
-            if (string.IsNullOrWhiteSpace(oldName) || string.IsNullOrWhiteSpace(newName))
-                return Results.BadRequest("Both oldName and newName are required.");
+            if (string.IsNullOrWhiteSpace(newName))
+                return Results.BadRequest("newName is required.");
 
-            if (!CategoryStore.Categories.Contains(oldName))
-                return Results.NotFound("Category not found.");
+            if (!CategoryStore.Categories.Contains(name))
+                return Results.NotFound();
 
             if (CategoryStore.Categories.Contains(newName))
-                return Results.BadRequest("Category with new name already exists.");
+                return Results.BadRequest("Category already exists.");
 
-            CategoryStore.Categories.Remove(oldName);
+            CategoryStore.Categories.Remove(name);
             CategoryStore.Categories.Add(newName);
 
             return Results.NoContent();

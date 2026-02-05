@@ -2,17 +2,16 @@
 
 namespace LocalEvents.Api.Endpoints.Categories;
 
-public class DeleteCategory : IEndpoint
+public class GetCategory : IEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapDelete("/categories/{name}", (string name) =>
+        app.MapGet("/categories/{name}", (string name) =>
         {
             if (!CategoryStore.Categories.Contains(name))
                 return Results.NotFound();
 
-            CategoryStore.Categories.Remove(name);
-            return Results.NoContent();
+            return Results.Ok(name);
         });
     }
 }
