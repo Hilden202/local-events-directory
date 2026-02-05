@@ -18,7 +18,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello API! Go to /scalar");
+app.MapGet("/", () => Results.Redirect("/scalar"));
 
 app.MapOpenApi(); // Exponerar OpenAPI-dokumentet som HTTP endpoint (/openapi/v1.json)
 app.MapEndpoints();
