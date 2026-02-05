@@ -18,10 +18,21 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 var app = builder.Build();
 
-app.MapGet("/", () => Results.Redirect("/scalar"));
+if (app.Environment.IsDevelopment())
+{
+    app.MapGet("/", () => Results.Redirect("/scalar"));
+}
+else
+{
+    app.MapGet("/", () => Results.Ok("OK"));
+}
 
-app.MapOpenApi(); // Exponerar OpenAPI-dokumentet som HTTP endpoint (/openapi/v1.json)
 app.MapEndpoints();
-app.MapScalarApiReference();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi(); // Exponerar OpenAPI-dokumentet som HTTP endpoint (/openapi/v1.json)
+    app.MapScalarApiReference();
+}
 
 app.Run();
