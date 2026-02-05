@@ -1,4 +1,6 @@
-﻿using LocalEvents.Api.Endpoints._internal;
+﻿using LocalEvents.Api.Data;
+using LocalEvents.Api.Endpoints._internal;
+using LocalEvents.Api.Endpoints.Categories.Models;
 
 namespace LocalEvents.Api.Endpoints.Categories;
 
@@ -6,17 +8,24 @@ public class PostCategory : IEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapPost("/catergories", (string name) =>
+        app.MapPost("/categories", (string name, AppDbContext db) =>
         {
             if (string.IsNullOrWhiteSpace(name))
                 return Results.BadRequest("Category name is required.");
 
-            if (CategoryStore.Categories.Contains(name))
+            if (db.Categories.Any(c => c.Name == name))
                 return Results.Conflict("Category already exists.");
 
-            CategoryStore.Categories.Add(name);
+            var category = new Category
+            {
+                Id = Guid.NewGuid(),
+                Name = name
+            };
 
-            return Results.Created($"/categories/{name}", name);
+            db.Categories.Add(category);
+            db.SaveChanges();
+            
+            return Results.Created($"/categories/{category.Id}", category);
         });
     }
 }
