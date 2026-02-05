@@ -1,4 +1,5 @@
-﻿using LocalEvents.Api.Endpoints._internal;
+﻿using LocalEvents.Api.Data;
+using LocalEvents.Api.Endpoints._internal;
 
 namespace LocalEvents.Api.Endpoints.Events;
 
@@ -6,10 +7,10 @@ public class GetEvent : IEndpoint
 {
     public static void MapEndpoint(IEndpointRouteBuilder app)
     {
-        app.MapGet("/events/{id}", (Guid id) =>
+        app.MapGet("/events/{id}", (Guid id, AppDbContext db) =>
         {
             // 1. Försök hitta eventet i listan
-            var foundEvent = EventStore.Events
+            var foundEvent = db.Events
                 .FirstOrDefault(e => e.Id == id);
             
             // 2. Om inget hittades → 404
