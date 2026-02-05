@@ -8,11 +8,13 @@ public static class EventStore
     {
         new Event
         {
+            Id = Guid.NewGuid(),
             Title = "Rockfest i hamnen",
             CategoryName = "Music"
         },
         new Event
         {
+            Id = Guid.NewGuid(),
             Title = "AI Meetup Nyköping",
             CategoryName = "Tech"
         }
