@@ -2,7 +2,7 @@
 
 public static class CategoryStore
 {
-    public static readonly List<string> Catergories =
+    public static readonly List<string> Categories =
     [
         "Music",
         "Sport",

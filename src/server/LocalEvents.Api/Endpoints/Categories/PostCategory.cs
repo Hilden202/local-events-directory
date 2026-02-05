@@ -11,10 +11,10 @@ public class PostCategory : IEndpoint
             if (string.IsNullOrWhiteSpace(name))
                 return Results.BadRequest("Category name is required.");
 
-            if (CategoryStore.Catergories.Contains(name))
+            if (CategoryStore.Categories.Contains(name))
                 return Results.Conflict("Category already exists.");
 
-            CategoryStore.Catergories.Add(name);
+            CategoryStore.Categories.Add(name);
 
             return Results.Created($"/categories/{name}", name);
         });
