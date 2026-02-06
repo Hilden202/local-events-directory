@@ -33,7 +33,7 @@ app.UseCors();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapGet("/", () => Results.Redirect("/scalar"));
+    app.MapGet("/", () => Results.Redirect("/scaler"));
 }
 else
 {
